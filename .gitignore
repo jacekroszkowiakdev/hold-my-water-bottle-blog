@@ -1,0 +1,47 @@
+# Terraform State Files
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+# Terraform Logs
+crash.log
+terraform.tfvars
+terraform.tfvars.json
+
+# AWS Credentials
+*.pem
+*.key
+.aws/
+
+# WordPress Specific
+wordpress/wp-config.php
+wordpress/wp-content/uploads/
+wordpress/wp-content/cache/
+wordpress/.htaccess
+
+# Node and Dependency Files (if applicable)
+node_modules/
+package-lock.json
+
+# Python Virtual Environment (if applicable)
+venv/
+__pycache__/
+
+# IDE Specific
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS Specific
+.DS_Store
+Thumbs.db
+
+# Logs and Temporary Files
+*.log
+*.tmp
+*.bak
+
+# Docker (if applicable)
+docker-compose.override.yml
+.env
