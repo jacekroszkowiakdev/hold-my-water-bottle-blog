@@ -1,8 +1,25 @@
 # WordPress blog on AWS with Terraform and Scrum
 
-**Project Overview**
+## Project Overview
 
-This project demonstrates the deployment of a scalable and fault-tolerant WordPress website on Amazon Web Services (AWS) using Terraform for infrastructure automation, Scrum methodology for project management, and Git/GitHub for collaboration. The architecture leverages Auto Scaling groups for horizontal scalability and redundancy across multiple Availability Zones for fault tolerance. Security best practices are integrated with IAM roles and Security Groups.
+The objective of this project is to automate the deployment of a scalable, fault-tolerant WordPress website on AWS using Terraform. We will utilize Git for version control and GitHub for collaborative development, adhering to Agile Scrum principles for efficient project management.
+
+This project will implement a fault-tolerant and scalable WordPress architecture on AWS. We will use Terraform to provision EC2 instances, configure an ALB for load balancing, create an ASG for automatic scaling, and deploy an RDS database. Python scripts will be used to automate additional configuration and deployment tasks.
+
+The intended audience are fellow students and instructors of the Neuefische AWS Course.
+
+**Project Requrements**
+
+Functional Requirements:
+
+-   The website must scale automatically based on traffic.
+-   The WordPress site must remain available even if one availability zone fails.
+
+Non-Functional Requirements:
+
+-   Availability: 99.9%
+-   Latency: Response time under 200ms for 95% of requests.
+-   Security: Use of IAM roles, Security Groups, and HTTPS.
 
 **Project Objectives:**
 
@@ -11,6 +28,45 @@ This project demonstrates the deployment of a scalable and fault-tolerant WordPr
 -   Collaborate effectively on infrastructure and code using Git and GitHub
 -   Manage project delivery iteratively with Scrum methodology
 -   Implement security best practices in AWS with IAM and Security Groups
+
+**Architecture Design**
+
+The architecture comprises a Virtual Private Cloud (VPC) with public and private subnets. An Internet Gateway (IGW) is attached to the VPC to provide internet connectivity. Separate route tables are configured for public and private subnets to control traffic flow. A Security Group is implemented to restrict inbound and outbound traffic to essential ports (HTTP and SSH).
+
+The compute layer consists of EC2 instances, pre-configured with Apache, PHP, and WordPress. These instances are launched from an Auto Scaling Group (ASG) to ensure automatic scaling based on load. The ASG is configured with a minimum of 1, desired capacity of 2, and a maximum of 4 instances. A User Data script is used to automate the configuration of WordPress on each instance launch.
+
+An Application Load Balancer (ALB) is deployed to distribute incoming traffic across multiple EC2 instances. The ALB is configured with a Target Group and Listener to route traffic to the appropriate instances.
+
+For persistent data storage, an Amazon Relational Database Service (RDS) instance in Multi-AZ deployment is used. This ensures high availability and durability of the database.
+
+![Architecture Diagram](./documents/architecture_diagram.png)
+
+**Infrastructure Components**
+
+-   Virtual Private Cloud (VPC):
+
+    -   Two Public Subnets
+    -   Two Private Subnets
+    -   Internet Gateway (IGW)
+    -   Separate Route Tables for Public and Private Subnets
+    -   Security Group: Allows HTTP and SSH Traffic
+
+-   Compute Resources:
+
+    -   EC2 Instances:
+        -   Pre-configured with Apache, PHP, and WordPress
+        -   Connected to RDS Database for Data Storage
+        -   Utilize User Data for Automated Configuration
+    -   Auto Scaling Group (ASG):
+
+        -   Minimum Capacity: 1 Instance
+        -   Desired Capacity: 2 Instances
+        -   Maximum Capacity: 4 Instances
+
+    -   Load Balancing:
+        -   Application Load Balancer (ALB)
+        -   Target Group
+        -   Listener Configuration
 
 **Technologies:**
 
