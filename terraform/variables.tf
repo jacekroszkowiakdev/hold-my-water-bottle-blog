@@ -1,9 +1,3 @@
-variable "vpc_id" {
-  description = "The ID of the VPC to use for the project"
-  type        = string
-  default = "aws_vpc.capstone_vpc.id"
-}
-
 variable "region" {
     description = "The region to use for the project"
     type        = string
