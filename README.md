@@ -39,7 +39,7 @@ An Application Load Balancer (ALB) is deployed to distribute incoming traffic ac
 
 For persistent data storage, an Amazon Relational Database Service (RDS) instance in Multi-AZ deployment is used. This ensures high availability and durability of the database.
 
-![Architecture Diagram](./documents/capstone_cloud_diagram.png)
+![Architecture Diagram](./documents/capstone_cloud_diagramterraform workspace list.png)
 
 **Infrastructure Components**
 
