@@ -15,3 +15,19 @@ variable "az2" {
   type        = string
   default     = "eu-central-1b"
 }
+
+# Declare variables to stop "Warning: Value for undeclared variable" in the UI
+variable "AWS_ACCESS_KEY_ID" {
+  description = "AWS Access Key ID"
+  type        = string
+}
+
+variable "AWS_SECRET_ACCESS_KEY" {
+  description = "AWS Secret Access Key"
+  type        = string
+}
+
+variable "AWS_SESSION_TOKEN" {
+  description = "AWS Session Token"
+  type        = string
+}
