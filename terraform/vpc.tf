@@ -6,31 +6,47 @@ resource "aws_vpc" "capstone_vpc" {
   }
 }
 
-# Subnet in eu-central-1a
+# Subnet in availability zone 1
 resource "aws_subnet" "public_subnet_1" {
-  vpc_id                  = aws_vpc.lab_vpc.id
+  vpc_id                  = var.vpc.id
   cidr_block              = "10.0.1.0/24"
   map_public_ip_on_launch = true
-  availability_zone       = "eu-central-1a"
+  availability_zone       = var.az1
+
+   tags = {
+    Name = "Public Subnet ${var.az1}"
+  }
 }
 
 resource "aws_subnet" "private_subnet_1" {
-  vpc_id            = aws_vpc.lab_vpc.id
+  vpc_id            = var.vpc.id
   cidr_block        = "10.0.2.0/24"
-  availability_zone = "eu-central-1a"
+  availability_zone = var.az1
+
+  tags = {
+    Name = "Private Subnet ${var.az1}"
+  }
 }
 
-# Subnet in eu-central-1b
+# Subnet in availability zone 2
 resource "aws_subnet" "public_subnet_2" {
-  vpc_id                  = aws_vpc.lab_vpc.id
+  vpc_id                  = var.vpc.id
   cidr_block              = "10.0.3.0/24"
   map_public_ip_on_launch = true
-  availability_zone       = "eu-central-1b"
+  availability_zone       = var.az2
+
+   tags = {
+    Name = "Public Subnet ${var.az2}"
+  }
 }
 
 resource "aws_subnet" "private_subnet_2" {
-  vpc_id            = aws_vpc.lab_vpc.id
+  vpc_id            = var.vpc.id
   cidr_block        = "10.0.4.0/24"
-  availability_zone = "eu-central-1b"
+  availability_zone = var.az2
+
+  tags = {
+    Name = "Private Subnet ${var.az2}2"
+  }
 }
 

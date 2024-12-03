@@ -1,7 +1,7 @@
 resource "aws_security_group" "capstone_blog_sg" {
      name        = "web-security-group"
      description = "Allow SSH, HTTP, and HTTPS access"
-    vpc_id      = aws_vpc.capstone_vpc.id
+    vpc_id      = var.vpc_id
 
     # Allow inbound from ports 22, 80 and 443
     ingress {
