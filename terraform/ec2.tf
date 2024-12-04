@@ -1,10 +1,15 @@
-# resource "aws_key_pair" "labsuser" {
-#   key_name   = "vockey"
-#   public_key = file("${abspath(path.cwd)}/labsuser.pem")
-# }
+data "aws_ami" "amazon_linux2" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+}
 
 resource "aws_instance" "wordpress_instance" {
-  ami                    = "ami-00d72ec36cdfc8a0a"
+  ami                    = data.aws_ami.amazon_linux2.id
   instance_type          = "t2.micro"
   key_name               = "vockey"
   subnet_id             = aws_subnet.public_subnet_1.id
