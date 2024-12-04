@@ -1,19 +1,19 @@
 variable "region" {
     description = "The region to use for the project"
     type        = string
-    default = "eu-central-1"
+    default = "us-west-2"
  }
 
 variable "az1" {
   description = "Primary availability zone"
   type        = string
-  default     = "eu-central-1a"
+  default     = "us-west-2a"
 }
 
 variable "az2" {
   description = "Secondary availability zone"
   type        = string
-  default     = "eu-central-1b"
+  default     = "us-west-2b"
 }
 
 # Declare variables to stop "Warning: Value for undeclared variable" in the UI
