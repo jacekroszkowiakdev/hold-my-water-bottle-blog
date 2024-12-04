@@ -1,19 +1,32 @@
 #!/bin/bash
-# Update and install Apache, PHP, and WordPress
 
-# Update packages and install required software
 sudo yum update -y
-sudo yum install -y httpd mariadb-server php php-mysqlnd php-fpm php-xml php-cli php-json php-common wget unzip
+
+# Configure AWS CLI with IAM role credentials
+aws configure set default.region us-west-2
+
+#Install httpd
+sudo yum install -y httpd
+sudo systemctl start httpd
+sudo systemctl enable httpd
+
+# install PHP and related packages
+sudo yum install -y mariadb-server wget unzip php-cli php-fpm php-mysqlnd php-json php-opcache php-xml php-gd php-mbstring
 
 # Enable and start Apache and MariaDB
 sudo systemctl enable httpd mariadb
 sudo systemctl start httpd mariadb
 
-# Configure MariaDB
+# Configure MariaDB for WordPress
 sudo mysql -e "CREATE DATABASE wordpress;"
 sudo mysql -e "CREATE USER 'wordpressuser'@'localhost' IDENTIFIED BY 'password';"
 sudo mysql -e "GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpressuser'@'localhost';"
 sudo mysql -e "FLUSH PRIVILEGES;"
+
+# Enable and install PHP 7.4
+sudo amazon-linux-extras enable php7.4
+sudo yum clean all
+sudo yum install -y php php-cli php-fpm php-mysqlnd php-json php-opcache php-xml php-gd php-mbstring
 
 # Install WordPress
 wget https://wordpress.org/latest.tar.gz
