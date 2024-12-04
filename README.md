@@ -1,4 +1,4 @@
-# WordPress blog on AWS with Terraform and Scrum
+# WordPress blog on AWS with Terraform
 
 ## Project Overview
 
@@ -54,9 +54,11 @@ For persistent data storage, an Amazon Relational Database Service (RDS) instanc
 -   Compute Resources:
 
     -   EC2 Instances:
+
         -   Pre-configured with Apache, PHP, and WordPress
         -   Connected to RDS Database for Data Storage
         -   Utilize User Data for Automated Configuration
+
     -   Auto Scaling Group (ASG):
 
         -   Minimum Capacity: 1 Instance
@@ -64,6 +66,7 @@ For persistent data storage, an Amazon Relational Database Service (RDS) instanc
         -   Maximum Capacity: 4 Instances
 
     -   Load Balancing:
+
         -   Application Load Balancer (ALB)
         -   Target Group
         -   Listener Configuration

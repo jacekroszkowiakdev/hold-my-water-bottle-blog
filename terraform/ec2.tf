@@ -17,9 +17,9 @@ resource "aws_instance" "wordpress_instance" {
   vpc_security_group_ids = [aws_security_group.capstone_blog_sg.id]
 
   tags = {
-    Name = "WordPress Blog EC2 Instance"
+    Name = "WordPress Blog Instance"
   }
 
   # Read the userData.sh file
-  user_data = file("${path.module}/../scripts/userDataEC2.sh")
+  user_data = file("../scripts/userDataEC2.sh")
 }
