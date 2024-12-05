@@ -41,3 +41,15 @@ resource "aws_subnet" "private_subnet_2" {
     Name = "Private Subnet ${var.az2}"
   }
 }
+
+# DB subnet group
+resource "aws_db_subnet_group" "rds_subnet_group" {
+  name       = "my-rds-subnet-group"
+  subnet_ids = [
+    aws_subnet.private_subnet_1.id,
+    aws_subnet.private_subnet_2.id
+  ]
+  tags = {
+    Name = "MyRDSSubnetGroup"
+  }
+}

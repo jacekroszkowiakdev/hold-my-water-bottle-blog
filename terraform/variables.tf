@@ -16,6 +16,12 @@ variable "az2" {
   default     = "us-west-2b"
 }
 
+variable "db_master_password" {
+  description = "The master password for the RDS MariaDB instance"
+  type        = string
+  sensitive   = true
+}
+
 # Declare variables to stop "Warning: Value for undeclared variable" in the UI
 variable "AWS_ACCESS_KEY_ID" {
   description = "AWS Access Key ID"

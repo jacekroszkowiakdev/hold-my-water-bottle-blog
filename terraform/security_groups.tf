@@ -42,3 +42,26 @@ resource "aws_security_group" "capstone_blog_sg" {
     Name = "Capstone Blog SG"
   }
 }
+
+# RDS MariaDB sg
+resource "aws_security_group" "rds_mariadb_sg" {
+  name        = "rds-security-group"
+  description = "Allow database access"
+
+  ingress {
+    from_port   = 3306    # MariaDB uses port 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/16"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"  # Allow all outbound traffic
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "RDS Security Group"
+  }
+}
