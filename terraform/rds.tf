@@ -4,9 +4,9 @@ resource "aws_db_instance" "multi_az_mariadb" {
   engine_version          = "10.6"
   instance_class          = "db.t3.micro"          # db.t3.micro for better performance with Multi-AZ failover
 
-  allocated_storage       = 2
+  allocated_storage       = 20
   # Enable auto-scaling for storage
-  max_allocated_storage   = 6
+  max_allocated_storage   = 40
   username                = "admin"
   password                = var.db_master_password
   publicly_accessible     = false
