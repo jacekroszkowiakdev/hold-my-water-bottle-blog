@@ -1,10 +1,10 @@
 resource "aws_security_group" "capstone_blog_sg" {
-     name        = "web-security-group"
-     description = "Allow SSH, HTTP, and HTTPS access"
-    vpc_id      = aws_vpc.capstone_vpc.id
+  name        = "web-security-group"
+  description = "Allow SSH, HTTP, and HTTPS access"
+  vpc_id      = aws_vpc.capstone_vpc.id
 
-    # Allow inbound from ports 22, 80 and 443
-    ingress {
+  # Allow inbound from ports 22, 80 and 443 and 3306 for MariaDB
+  ingress {
     description      = "Allow SSH"
     from_port        = 22
     to_port          = 22
@@ -12,7 +12,7 @@ resource "aws_security_group" "capstone_blog_sg" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
-   ingress {
+  ingress {
     description      = "Allow HTTP"
     from_port        = 80
     to_port          = 80
@@ -28,8 +28,15 @@ resource "aws_security_group" "capstone_blog_sg" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
-  # Allow all outbound traffic
+  ingress {
+    description      = "Allow MariaDB from RDS"
+    from_port        = 3306
+    to_port          = 3306
+    protocol         = "tcp"
+    security_groups  = [aws_security_group.rds_mariadb_sg.id]
+  }
 
+  # Allow all outbound traffic
   egress {
     description      = "Allow all outbound traffic"
     from_port        = 0
@@ -48,11 +55,12 @@ resource "aws_security_group" "rds_mariadb_sg" {
   name        = "rds-security-group"
   description = "Allow database access"
 
+  # Allow inbound MariaDB traffic from EC2 instances within the same VPC
   ingress {
-    from_port   = 3306    # MariaDB uses port 3306
+    from_port   = 3306
     to_port     = 3306
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]
+    security_groups = [aws_security_group.capstone_blog_sg.id]
   }
 
   egress {
@@ -61,7 +69,8 @@ resource "aws_security_group" "rds_mariadb_sg" {
     protocol    = "-1"  # Allow all outbound traffic
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   tags = {
-    Name = "RDS Security Group"
+    Name = "Capstone RDS SG"
   }
 }
