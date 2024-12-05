@@ -35,14 +35,12 @@ resource "aws_db_instance" "replica1" {
   engine                = aws_db_instance.multi_az_mariadb.engine
   engine_version        = aws_db_instance.multi_az_mariadb.engine_version
 
-  multi_az               = true
   replicate_source_db   = aws_db_instance.multi_az_mariadb.id
-  password              = aws_db_instance.multi_az_mariadb.password
+  multi_az               = true
   port                  = 3306
   publicly_accessible    = false
   skip_final_snapshot    = false
-  username              = aws_db_instance.multi_az_mariadb.username
-  vpc_security_group_ids = aws_db_instance.multi_az_mariadb.vpc_security_group_ids
+  vpc_security_group_ids = [aws_db_instance.multi_az_mariadb.vpc_security_group_ids]
 
   depends_on = [aws_db_instance.multi_az_mariadb]
 }

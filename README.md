@@ -8,7 +8,7 @@ This project will implement a fault-tolerant and scalable WordPress architecture
 
 The intended audience are fellow students and instructors of the Neuefische AWS Course.
 
-**Project Requrements**
+**Project Requirements**
 
 Functional Requirements:
 
