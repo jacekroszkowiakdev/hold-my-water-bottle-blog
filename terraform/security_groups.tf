@@ -46,6 +46,7 @@ resource "aws_security_group" "capstone_blog_sg" {
 resource "aws_security_group" "rds_mariadb_sg" {
   name        = "rds-security-group"
   description = "Allow database access"
+  vpc_id      = aws_vpc.capstone_vpc.id
 
   # Allow inbound MariaDB traffic from EC2 instances within the same VPC
   ingress {
