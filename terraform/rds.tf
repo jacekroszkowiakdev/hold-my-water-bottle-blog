@@ -10,7 +10,7 @@ resource "aws_db_instance" "multi_az_mariadb" {
   username                = "admin"
   password                = var.db_master_password
   publicly_accessible     = false
-  vpc_security_group_ids = aws_security_group.rds_mariadb_sg.id
+  vpc_security_group_ids = [aws_security_group.rds_mariadb_sg.id]
   db_subnet_group_name    = aws_db_subnet_group.rds_subnet_group.name
 
  # Multi-AZ for failover
