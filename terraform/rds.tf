@@ -40,7 +40,7 @@ resource "aws_db_instance" "replica1" {
   port                  = 3306
   publicly_accessible    = false
   skip_final_snapshot    = false
-  vpc_security_group_ids = [aws_db_instance.multi_az_mariadb.vpc_security_group_ids]
+  vpc_security_group_ids = aws_db_instance.multi_az_mariadb.vpc_security_group_ids
 
   depends_on = [aws_db_instance.multi_az_mariadb]
 }
