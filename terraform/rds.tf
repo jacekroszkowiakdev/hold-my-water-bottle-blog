@@ -2,7 +2,7 @@ resource "aws_db_instance" "multi_az_mariadb" {
   identifier              = "capstone-mariadb-instance"
   engine                  = "mariadb"
   engine_version          = "10.6"
-  instance_class          = "db.t3.micro"          # db.t3.micro for better performance with Multi-AZ failover
+  instance_class          = var.db_instance_class          # db.t3.micro for better performance with Multi-AZ failover
 
   allocated_storage       = 20
   # Enable auto-scaling for storage
@@ -30,7 +30,7 @@ resource "aws_db_instance" "multi_az_mariadb" {
 resource "aws_db_instance" "replica1" {
   allocated_storage    = aws_db_instance.multi_az_mariadb.allocated_storage
   auto_minor_version_upgrade = true
-  instance_class     = aws_db_instance.multi_az_mariadb.db_instance_class
+  instance_class     = var.db_instance_class
   identifier = "capstone-mariadb-replica-instance"
   engine                = aws_db_instance.multi_az_mariadb.engine
   engine_version        = aws_db_instance.multi_az_mariadb.engine_version
