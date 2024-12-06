@@ -16,13 +16,25 @@ variable "az2" {
   default     = "us-west-2b"
 }
 
+# Database variables
 variable "db_instance_class" {
   description = "The instance class for the RDS instances"
   type        = string
   default     = "db.t3.micro"
 }
 
-variable "db_master_password" {
+variable "TF_VAR_DB_NAME" {
+  description = "The database name for the RDS MariaDB instance"
+  type        = string
+  sensitive   = true
+}
+
+variable "TF_VAR_DB_USER" {
+  description = "The username for the RDS MariaDB instance"
+  type        = string
+  sensitive   = true
+}
+variable "TF_VAR_DB_MASTER_PASSWORD" {
   description = "The master password for the RDS MariaDB instance"
   type        = string
   sensitive   = true

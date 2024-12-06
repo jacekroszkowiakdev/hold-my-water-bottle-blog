@@ -36,12 +36,14 @@ done
 
 echo "RDS endpoint: $RDS_ENDPOINT"
 
-DB_PASSWORD="${TFTF_VAR_db_master_password}"
+DB_NAME="${TF_VAR_DB_NAME}"
+DB_USER="${TF_VAR_DB_USER}"
+DB_PASSWORD="${TF_VAR_DB_MASTER_PASSWORD}"
 
 # Update wp-config.php with the RDS database credentials
-sudo sed -i "s/define('DB_NAME', 'wordpress');/define('DB_NAME', 'wordpress');/g" /var/www/html/wordpress/wp-config.php
-sudo sed -i "s/define('DB_USER', 'wordpressuser');/define('DB_USER', 'wordpressuser');/g" /var/www/html/wordpress/wp-config.php
-sudo sed -i "s/define('DB_PASSWORD', 'test2024test');/define('DB_PASSWORD', '$DB_PASSWORD');/g" /var/www/html/wordpress/wp-config.php
+sudo sed -i "s/define('DB_NAME', 'wordpress');/define('DB_NAME', '$DB_NAME');/g" /var/www/html/wordpress/wp-config.php
+sudo sed -i "s/define('DB_USER', 'wordpressuser');/define('DB_USER', '$DB_USER');/g" /var/www/html/wordpress/wp-config.php
+sudo sed -i "s/define('DB_PASSWORD', 'password');/define('DB_PASSWORD', '$DB_PASSWORD');/g" /var/www/html/wordpress/wp-config.php
 sudo sed -i "s/define('DB_HOST', 'localhost');/define('DB_HOST', '$RDS_ENDPOINT');/g" /var/www/html/wordpress/wp-config.php
 
 # Open HTTP traffic on the firewall
