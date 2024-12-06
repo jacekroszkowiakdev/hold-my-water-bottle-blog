@@ -21,6 +21,7 @@ resource "aws_db_instance" "multi_az_mariadb" {
   storage_type            = "gp2"
   backup_retention_period = 7
   skip_final_snapshot     = false
+  final_snapshot_identifier = "capstone-mariadb-instance-final-snapshot"
 
   tags = {
     Name        = "MyMariaDBInstance"
