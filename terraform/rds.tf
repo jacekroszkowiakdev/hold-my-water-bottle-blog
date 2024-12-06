@@ -8,7 +8,7 @@ resource "aws_db_instance" "multi_az_mariadb" {
   # Enable auto-scaling for storage
   max_allocated_storage   = 40
   username                = "admin"
-  password                = var.TF_VAR_DB_MASTER_PASSWORD
+  password                = var.var.TF_VAR_DB_MASTER_PASSWORD
   publicly_accessible     = false
   vpc_security_group_ids = [aws_security_group.rds_mariadb_sg.id]
   db_subnet_group_name    = aws_db_subnet_group.rds_subnet_group.name

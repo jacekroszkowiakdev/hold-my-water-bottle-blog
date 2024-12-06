@@ -1,13 +1,16 @@
 #!/bin/bash
 
+source .env
+
+printenv | grep -E 'TF_VAR_|AWS_' > /home/ec2-user/environment_vars.txt
 # Update system
 sudo yum update -y
 
 # Set AWS credentials using values passed from Terraform
-AWS_REGION="${TF_VAR_AWS_REGION}"
-AWS_ACCESS_KEY_ID="${TF_VAR_AWS_ACCESS_KEY_ID}"
-AWS_SECRET_ACCESS_KEY="${TF_VAR_AWS_SECRET_ACCESS_KEY}"
-AWS_SESSION_TOKEN="${TF_VAR_AWS_SESSION_TOKEN}"
+AWS_REGION="${TF_VAR_aws_region}"
+AWS_ACCESS_KEY_ID="${TF_VAR_aws_access_id}"
+AWS_SECRET_ACCESS_KEY="${TF_VAR_aws_secret_access_key}"
+AWS_SESSION_TOKEN="${TF_VAR_aws_session_token}"
 
 # Log the variables to a log file for debugging
 LOG_FILE="/var/log/aws_credentials.log"
@@ -56,11 +59,11 @@ while [ -z "$RDS_ENDPOINT" ]; do
   sleep 10  # Wait for 10 seconds before checking again
 done
 
-echo "RDS endpoint: $RDS_ENDPOINT"
+echo "RDS endpoint: $RDS_ENDPOINT" > /home/ec2-user/rds_endpoint.txt
 
-DB_NAME="${TF_VAR_DB_NAME}"
-DB_USER="${TF_VAR_DB_USER}"
-DB_PASSWORD="${TF_VAR_DB_MASTER_PASSWORD}"
+DB_NAME="${TF_VAR_db_name}"
+DB_USER="${TF_VAR_db_user}"
+DB_PASSWORD="${TF_VAR_db_master_password}"
 
 # Update wp-config.php with the RDS database credentials
 sudo sed -i "s/define('DB_NAME', 'wordpress');/define('DB_NAME', '$DB_NAME');/g" /var/www/html/wordpress/wp-config.php

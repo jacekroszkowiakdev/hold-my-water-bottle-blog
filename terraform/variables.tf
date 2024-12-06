@@ -1,4 +1,4 @@
-variable "TF_VAR_AWS_REGION" {
+variable "region" {
     description = "The region to use for the project"
     type        = string
     default = "us-west-2"
@@ -16,7 +16,6 @@ variable "az2" {
   default     = "us-west-2b"
 }
 
-# Database variables
 variable "db_instance_class" {
   description = "The instance class for the RDS instances"
   type        = string
