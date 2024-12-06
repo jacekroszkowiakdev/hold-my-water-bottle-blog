@@ -7,10 +7,11 @@ resource "aws_db_instance" "multi_az_mariadb" {
   allocated_storage       = 20
   # Enable auto-scaling for storage
   max_allocated_storage   = 40
-  username                = var.TF_VAR_db_user
-  password                = var.TF_VAR_db_master_password
+  username                = var.db_user
+  password                = var.db_master_password
+  db_name                 =  var.db_name
   publicly_accessible     = false
-  vpc_security_group_ids = [aws_security_group.rds_mariadb_sg.id]
+  vpc_security_group_ids  = [aws_security_group.rds_mariadb_sg.id]
   db_subnet_group_name    = aws_db_subnet_group.rds_subnet_group.name
 
  # Multi-AZ for failover
@@ -29,6 +30,19 @@ resource "aws_db_instance" "multi_az_mariadb" {
 
 output "rds_endpoint" {
   value = aws_db_instance.multi_az_mariadb.endpoint
+}
+
+output "rds_db_name" {
+  value = aws_db_instance.multi_az_mariadb.db_name
+  sensitive = true
+}
+output "rds_username" {
+  value = var.db_user
+  sensitive = true
+}
+output "rds_password" {
+  value     = var.db_master_password
+  sensitive = true
 }
 
 # REPLICA NOT ALLOWED in SANDBOX environment...

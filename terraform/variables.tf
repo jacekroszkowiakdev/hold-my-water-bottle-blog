@@ -22,18 +22,18 @@ variable "db_instance_class" {
   default     = "db.t3.micro"
 }
 
-variable "TF_VAR_db_name" {
+variable "db_name" {
   description = "The database name for the RDS MariaDB instance"
   type        = string
   sensitive   = true
 }
 
-variable "TF_VAR_db_user" {
+variable "db_user" {
   description = "The username for the RDS MariaDB instance"
   type        = string
   sensitive   = true
 }
-variable "TF_VAR_db_master_password" {
+variable "db_master_password" {
   description = "The master password for the RDS MariaDB instance"
   type        = string
   sensitive   = true
