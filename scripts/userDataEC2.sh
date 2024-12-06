@@ -1,16 +1,13 @@
 #!/bin/bash
 
-source .env
-
-printenv | grep -E 'TF_VAR_|AWS_' > /home/ec2-user/environment_vars.txt
 # Update system
 sudo yum update -y
 
 # Set AWS credentials using values passed from Terraform
-AWS_REGION="${TF_VAR_aws_region}"
-AWS_ACCESS_KEY_ID="${TF_VAR_aws_access_id}"
-AWS_SECRET_ACCESS_KEY="${TF_VAR_aws_secret_access_key}"
-AWS_SESSION_TOKEN="${TF_VAR_aws_session_token}"
+AWS_REGION="${region}"
+AWS_ACCESS_KEY_ID="${access_key}"
+AWS_SECRET_ACCESS_KEY="${secret_key}"
+AWS_SESSION_TOKEN="${token}"
 
 # Log the variables to a log file for debugging
 LOG_FILE="/var/log/aws_credentials.log"
@@ -55,7 +52,7 @@ sudo chmod -R 755 /var/www/html/wordpress
 RDS_ENDPOINT=""
 while [ -z "$RDS_ENDPOINT" ]; do
   echo "Waiting for RDS endpoint..."
-  RDS_ENDPOINT=$(aws rds describe-db-instances --query "DBInstances[?DBInstanceIdentifier=='capstone-mariadb-instance'].Endpoint.Address" --output text)
+  RDS_ENDPOINT=${rds_endpoint}
   sleep 10  # Wait for 10 seconds before checking again
 done
 
@@ -64,6 +61,11 @@ echo "RDS endpoint: $RDS_ENDPOINT" > /home/ec2-user/rds_endpoint.txt
 DB_NAME="${TF_VAR_db_name}"
 DB_USER="${TF_VAR_db_user}"
 DB_PASSWORD="${TF_VAR_db_master_password}"
+
+sudo echo "RDS endpoint: $RDS_ENDPOINT" >> /home/ec2-user/db.txt
+sudo echo "DB name: $DB_NAME" >> /home/ec2-user/
+sudo echo "DB user: $DB_USER" >> /home/ec2-user/db.txt
+sudo echo "DB password: $DB_PASSWORD" >> /home/ec2-user/db.txt
 
 # Update wp-config.php with the RDS database credentials
 sudo sed -i "s/define('DB_NAME', 'wordpress');/define('DB_NAME', '$DB_NAME');/g" /var/www/html/wordpress/wp-config.php

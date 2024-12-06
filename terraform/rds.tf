@@ -7,8 +7,8 @@ resource "aws_db_instance" "multi_az_mariadb" {
   allocated_storage       = 20
   # Enable auto-scaling for storage
   max_allocated_storage   = 40
-  username                = "admin"
-  password                = var.TF_VAR_DB_MASTER_PASSWORD
+  username                = var.TF_VAR_db_user
+  password                = var.TF_VAR_db_master_password
   publicly_accessible     = false
   vpc_security_group_ids = [aws_security_group.rds_mariadb_sg.id]
   db_subnet_group_name    = aws_db_subnet_group.rds_subnet_group.name
@@ -25,6 +25,10 @@ resource "aws_db_instance" "multi_az_mariadb" {
     Name        = "MyMariaDBInstance"
     Environment = "Production"
   }
+}
+
+output "rds_endpoint" {
+  value = aws_db_instance.multi_az_mariadb.endpoint
 }
 
 # REPLICA NOT ALLOWED in SANDBOX environment...
