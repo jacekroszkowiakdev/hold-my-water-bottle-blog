@@ -1,4 +1,4 @@
-variable "region" {
+variable "TF_VAR_AWS_REGION" {
     description = "The region to use for the project"
     type        = string
     default = "us-west-2"

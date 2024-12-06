@@ -3,8 +3,30 @@
 # Update system
 sudo yum update -y
 
-# Configure AWS CLI with IAM role credentials
-aws configure set default.region us-west-2
+# Set AWS credentials using values passed from Terraform
+AWS_REGION="${TF_VAR_AWS_REGION}"
+AWS_ACCESS_KEY_ID="${TF_VAR_AWS_ACCESS_KEY_ID}"
+AWS_SECRET_ACCESS_KEY="${TF_VAR_AWS_SECRET_ACCESS_KEY}"
+AWS_SESSION_TOKEN="${TF_VAR_AWS_SESSION_TOKEN}"
+
+# Log the variables to a log file for debugging
+LOG_FILE="/var/log/aws_credentials.log"
+
+{
+  echo "AWS_REGION=${AWS_REGION}"
+  echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
+  echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+  echo "AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}"
+} > "$LOG_FILE"
+
+# Configure AWS CLI with the credentials
+aws configure set region "$AWS_REGION"
+aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
+aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
+aws configure set aws_session_token "$AWS_SESSION_TOKEN"
+
+# Verify the configuration
+aws sts get-caller-identity > /var/log/aws_caller_identity.log 2>&1
 
 # Install and configure Apache
 sudo yum install -y httpd
