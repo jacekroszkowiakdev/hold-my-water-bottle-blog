@@ -3,27 +3,27 @@
 # Update system
 sudo yum update -y
 
-# Set AWS credentials using values passed from Terraform
-# AWS_REGION="${region}"
-# AWS_ACCESS_KEY_ID="${access_key}"
-# AWS_SECRET_ACCESS_KEY="${secret_key}"
-# AWS_SESSION_TOKEN="${token}"
+# Set AWS credentials using values passed from Terraform environment variables
+AWS_REGION="${TF_VAR_region}"
+AWS_ACCESS_KEY_ID="${TF_VAR_AWS_ACCESS_KEY_ID}"
+AWS_SECRET_ACCESS_KEY="${TF_VAR_AWS_SECRET_ACCESS_KEY}"
+AWS_SESSION_TOKEN="${TF_VAR_AWS_SESSION_TOKEN}"
 
 # Log the variables to a log file for debugging
-# LOG_FILE="/var/log/aws_credentials.log"
+LOG_FILE="/var/log/aws_credentials.log"
 
-# {
-#   echo "AWS_REGION=${AWS_REGION}"
-#   echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
-#   echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-#   echo "AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}"
-# } > "$LOG_FILE"
+{
+  echo "AWS_REGION=${AWS_REGION}"
+  echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
+  echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+  echo "AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}"
+} > "$LOG_FILE"
 
 # Configure AWS CLI with the credentials
-aws configure set region "$region"
-# aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
-# aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
-# aws configure set aws_session_token "$AWS_SESSION_TOKEN"
+aws configure set region "$AWS_REGION"
+aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
+aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
+aws configure set aws_session_token "$AWS_SESSION_TOKEN"
 
 # Verify the configuration
 aws sts get-caller-identity > /var/log/aws_caller_identity.log 2>&1
@@ -50,29 +50,17 @@ sudo mv wordpress /var/www/html/
 sudo chown -R apache:apache /var/www/html/wordpress
 sudo chmod -R 755 /var/www/html/wordpress
 
-# Get the RDS endpoint
-# RDS_ENDPOINT=""
-# while [ -z "$RDS_ENDPOINT" ]; do
-#   echo "Waiting for RDS endpoint..."
-#   RDS_ENDPOINT="${rds_endpoint}"
-#   sleep 10  # Wait for 10 seconds before checking again
-# done
-
-echo "RDS endpoint: $RDS_ENDPOINT" > /home/ec2-user/rds_endpoint.txt
-
-# DB_NAME="${rds_db_name}"
-# DB_USER="${rds_username}"
-# DB_PASSWORD="${rds_password}"
-
+# DB credentials
 RDS_ENDPOINT="${rds_endpoint}"
-DB_NAME="wordpress"
-DB_USER="wordpressuser"
-DB_PASSWORD="test2024test"
+DB_NAME="${rds_db_name}"
+DB_USER="${rds_username}"
+DB_PASSWORD="${rds_password}"
 
-sudo echo "RDS endpoint: $RDS_ENDPOINT" >> /home/ec2-user/db.txt
-sudo echo "DB name: $DB_NAME" >> /home/ec2-user/
-sudo echo "DB user: $DB_USER" >> /home/ec2-user/db.txt
-sudo echo "DB password: $DB_PASSWORD" >> /home/ec2-user/db.txt
+# Log RDS and DB credentials to a file
+echo "RDS endpoint: $RDS_ENDPOINT" > /home/ec2-user/rds_endpoint.txt
+echo "DB name: $DB_NAME" >> /home/ec2-user/db.txt
+echo "DB user: $DB_USER" >> /home/ec2-user/db.txt
+echo "DB password: $DB_PASSWORD" >> /home/ec2-user/db.txt
 
 # Update wp-config.php with the RDS database credentials
 sudo sed -i "s/define('DB_NAME', 'wordpress');/define('DB_NAME', '$DB_NAME');/g" /var/www/html/wordpress/wp-config.php

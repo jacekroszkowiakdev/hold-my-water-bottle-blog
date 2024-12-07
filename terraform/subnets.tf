@@ -42,9 +42,26 @@ resource "aws_subnet" "private_subnet_2" {
   }
 }
 
+data "aws_subnet" "private_subnet_1_info" {
+  id = aws_subnet.private_subnet_1.id
+}
+
+data "aws_subnet" "private_subnet_2_info" {
+  id = aws_subnet.private_subnet_2.id
+}
+
+output "vpc_id_subnet_1" {
+  value = data.aws_subnet.private_subnet_1_info.vpc_id
+}
+
+output "vpc_id_subnet_2" {
+  value = data.aws_subnet.private_subnet_2_info.vpc_id
+}
+
 # DB subnet group
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name       = "my-rds-subnet-group"
+
   subnet_ids = [
     aws_subnet.private_subnet_1.id,
     aws_subnet.private_subnet_2.id

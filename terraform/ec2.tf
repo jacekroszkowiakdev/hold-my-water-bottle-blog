@@ -21,5 +21,5 @@ resource "aws_instance" "wordpress_instance" {
   }
 
   # Read the userData.sh file
-  user_data = file("./userDataEC2.sh")
+  user_data = file("${path.module}/userDataEC2.sh")
 }
