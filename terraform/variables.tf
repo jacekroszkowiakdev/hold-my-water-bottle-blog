@@ -33,7 +33,7 @@ variable "db_user" {
   type        = string
   sensitive   = true
 }
-variable "db_master_password" {
+variable "db_password" {
   description = "The master password for the RDS MariaDB instance"
   type        = string
   sensitive   = true

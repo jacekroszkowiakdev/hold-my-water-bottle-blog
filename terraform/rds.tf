@@ -8,7 +8,7 @@ resource "aws_db_instance" "multi_az_mariadb" {
   # Enable auto-scaling for storage
   max_allocated_storage   = 40
   username                = var.db_user
-  password                = var.db_master_password
+  password                = var.db_password
   db_name                 =  var.db_name
   publicly_accessible     = false
   vpc_security_group_ids  = [aws_security_group.rds_mariadb_sg.id]
@@ -29,12 +29,16 @@ resource "aws_db_instance" "multi_az_mariadb" {
   }
 }
 
+data "aws_db_instance" "multi_az_mariadb" {
+  db_instance_identifier =  aws_db_instance.multi_az_mariadb.identifier
+}
+
 output "rds_endpoint" {
-  value = aws_db_instance.multi_az_mariadb.endpoint
+  value = data.aws_db_instance.multi_az_mariadb.endpoint
 }
 
 output "rds_db_name" {
-  value = aws_db_instance.multi_az_mariadb.db_name
+  value = data.aws_db_instance.multi_az_mariadb.db_name
   sensitive = true
 }
 output "rds_username" {
@@ -42,7 +46,7 @@ output "rds_username" {
   sensitive = true
 }
 output "rds_password" {
-  value     = var.db_master_password
+  value     = var.db_password
   sensitive = true
 }
 

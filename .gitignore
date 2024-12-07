@@ -12,6 +12,7 @@ terraform.tfvars.json
 *.pem
 *.key
 .aws/
+set_env.sh
 
 # WordPress Specific
 wordpress/wp-config.php

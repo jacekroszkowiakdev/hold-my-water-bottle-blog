@@ -3,27 +3,8 @@
 # Update system
 sudo yum update -y
 
-# Set AWS credentials using values passed from Terraform environment variables
-AWS_REGION="${TF_VAR_region}"
-AWS_ACCESS_KEY_ID="${TF_VAR_AWS_ACCESS_KEY_ID}"
-AWS_SECRET_ACCESS_KEY="${TF_VAR_AWS_SECRET_ACCESS_KEY}"
-AWS_SESSION_TOKEN="${TF_VAR_AWS_SESSION_TOKEN}"
-
-# Log the variables to a log file for debugging
-LOG_FILE="/var/log/aws_credentials.log"
-
-{
-  echo "AWS_REGION=${AWS_REGION}"
-  echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
-  echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-  echo "AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}"
-} > "$LOG_FILE"
-
 # Configure AWS CLI with the credentials
-aws configure set region "$AWS_REGION"
-aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
-aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
-aws configure set aws_session_token "$AWS_SESSION_TOKEN"
+aws configure set region "us-west-2"
 
 # Verify the configuration
 aws sts get-caller-identity > /var/log/aws_caller_identity.log 2>&1
@@ -63,10 +44,11 @@ echo "DB user: $DB_USER" >> /home/ec2-user/db.txt
 echo "DB password: $DB_PASSWORD" >> /home/ec2-user/db.txt
 
 # Update wp-config.php with the RDS database credentials
-sudo sed -i "s/define('DB_NAME', 'wordpress');/define('DB_NAME', '$DB_NAME');/g" /var/www/html/wordpress/wp-config.php
-sudo sed -i "s/define('DB_USER', 'wordpressuser');/define('DB_USER', '$DB_USER');/g" /var/www/html/wordpress/wp-config.php
-sudo sed -i "s/define('DB_PASSWORD', 'password');/define('DB_PASSWORD', '$DB_PASSWORD');/g" /var/www/html/wordpress/wp-config.php
-sudo sed -i "s/define('DB_HOST', 'localhost');/define('DB_HOST', '$RDS_ENDPOINT');/g" /var/www/html/wordpress/wp-config.php
+sudo cp ./wp-config-sample.php ./wp-config.php
+sudo sed -i "s/'database_name_here'/'$DB_NAME'/g" wp-config.php
+sudo sed -i "s/'username_here'/'$DB_USER'/g" wp-config.php
+sudo sed -i "s/'password_here'/'$$DB_PASSWORD'/g" wp-config.php
+sudo sed -i "s/'localhost'/'$RDS_ENDPOINT'/g" wp-config.php
 
 # Open HTTP traffic on the firewall
 sudo firewall-cmd --permanent --zone=public --add-service=http
