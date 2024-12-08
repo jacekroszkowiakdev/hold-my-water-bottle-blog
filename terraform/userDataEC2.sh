@@ -50,9 +50,5 @@ sudo sed -i "s/'username_here'/'$DB_USER'/g" wp-config.php
 sudo sed -i "s/'password_here'/'$$DB_PASSWORD'/g" wp-config.php
 sudo sed -i "s/'localhost'/'$RDS_ENDPOINT'/g" wp-config.php
 
-# Open HTTP traffic on the firewall
-sudo firewall-cmd --permanent --zone=public --add-service=http
-sudo firewall-cmd --reload
-
 # Restart Apache to apply changes
 sudo systemctl restart httpd
