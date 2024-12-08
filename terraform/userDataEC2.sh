@@ -38,7 +38,7 @@ DB_USER="${rds_username}"
 DB_PASSWORD="${rds_password}"
 
 # Log RDS and DB credentials to a file
-echo "RDS endpoint: $RDS_ENDPOINT" > /home/ec2-user/rds_endpoint.txt
+echo "RDS endpoint: $RDS_ENDPOINT" > /home/ec2-user/db.txt
 echo "DB name: $DB_NAME" >> /home/ec2-user/db.txt
 echo "DB user: $DB_USER" >> /home/ec2-user/db.txt
 echo "DB password: $DB_PASSWORD" >> /home/ec2-user/db.txt

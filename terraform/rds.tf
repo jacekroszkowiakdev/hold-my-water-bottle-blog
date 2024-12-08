@@ -29,27 +29,6 @@ resource "aws_db_instance" "multi_az_mariadb" {
   }
 }
 
-data "aws_db_instance" "multi_az_mariadb" {
-  db_instance_identifier =  aws_db_instance.multi_az_mariadb.identifier
-}
-
-output "rds_endpoint" {
-  value = data.aws_db_instance.multi_az_mariadb.endpoint
-}
-
-output "rds_db_name" {
-  value = data.aws_db_instance.multi_az_mariadb.db_name
-  sensitive = true
-}
-output "rds_username" {
-  value = var.db_user
-  sensitive = true
-}
-output "rds_password" {
-  value     = var.db_password
-  sensitive = true
-}
-
 # REPLICA NOT ALLOWED in SANDBOX environment...
 # resource "aws_db_instance" "replica1" {
 #   allocated_storage    = aws_db_instance.multi_az_mariadb.allocated_storage
