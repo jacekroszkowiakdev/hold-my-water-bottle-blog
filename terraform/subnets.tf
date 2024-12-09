@@ -60,13 +60,12 @@ output "vpc_id_subnet_2" {
 
 # DB subnet group
 resource "aws_db_subnet_group" "rds_subnet_group" {
-  name       = "my-rds-subnet-group"
 
   subnet_ids = [
     aws_subnet.private_subnet_1.id,
     aws_subnet.private_subnet_2.id
   ]
   tags = {
-    Name = "MyRDSSubnetGroup"
+    Name = "RDS Subnet Group"
   }
 }

@@ -16,6 +16,8 @@ resource "aws_instance" "wordpress_instance" {
   associate_public_ip_address = true
   vpc_security_group_ids = [aws_security_group.capstone_blog_sg.id]
 
+  depends_on = [aws_db_instance.multi_az_mariadb]
+
   tags = {
     Name = "WordPress Blog Instance"
   }

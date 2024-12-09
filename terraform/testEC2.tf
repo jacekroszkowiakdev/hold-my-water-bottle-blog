@@ -1,3 +1,29 @@
+data "aws_ami" "test_amazon_linux2" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+}
+
+resource "aws_instance" "test_ec2" {
+  ami                    = data.aws_ami.test_amazon_linux2.id
+  instance_type          = "t2.micro"
+  key_name               = "vockey"
+  subnet_id             = aws_subnet.public_subnet_1.id
+  associate_public_ip_address = true
+  vpc_security_group_ids = [aws_security_group.capstone_blog_sg.id]
+
+  depends_on = [aws_db_instance.multi_az_mariadb]
+
+  tags = {
+    Name = "Test EC2 Instance"
+  }
+
+  # Read the userData.sh file
+  user_data = <<-EOF
 #!/bin/bash
 
 # Update system
@@ -31,30 +57,26 @@ sudo mv wordpress /var/www/html/
 sudo chown -R apache:apache /var/www/html/wordpress
 sudo chmod -R 755 /var/www/html/wordpress
 
-# DB credentials
-# Wait for RDS endpoint to be available
-# while ! nc -z $rds_endpoint 3306; do
-#   echo "Waiting for RDS to become available..."
-#   sleep 5
-# done
 
-# RDS_ENDPOINT=$(echo ${rds_endpoint} | sed 's/^[ \t]*//;s/[ \t]*$//;s/%$//')
-# DB_NAME=$(echo ${rds_db_name} | sed 's/^[ \t]*//;s/[ \t]*$//;s/%$//')
-# DB_USER=$(echo ${rds_username} | sed 's/^[ \t]*//;s/[ \t]*$//;s/%$//')
-# DB_PASSWORD=$(echo ${rds_password} | sed 's/^[ \t]*//;s/[ \t]*$//;s/%$//')
+RDS_ENDPOINT="${aws_db_instance.multi_az_mariadb.endpoint}
+DB_NAME=${var.db_name}
+DB_USER=${var.db_user}
+DB_PASSWORD=${var.db_password}
 
-RDS_ENDPOINT=${rds_endpoint}
-DB_NAME=${rds_db_name}
-DB_USER=${rds_username}
-DB_PASSWORD=${rds_password}
+DB_OTHER_OPT=${data.aws_db_instance.multi_az_mariadb.endpoint}
+DB_OTHER_OPT2=${aws_db_instance.multi_az_mariadb.endpoint}
+
 
 # Log RDS and DB credentials to a file
+
 sudo touch /home/ec2-user/db.txt
 sudo chmod 777 /home/ec2-user/db.txt
 echo "DB name: $DB_NAME" >> /home/ec2-user/db.txt
 echo "DB user: $DB_USER" >> /home/ec2-user/db.txt
 echo "DB password: $DB_PASSWORD" >> /home/ec2-user/db.txt
 echo "RDS endpoint: $RDS_ENDPOINT" >> /home/ec2-user/db.txt
+echo "RDS endpoint v2: DB_OTHER_OPT" >> /home/ec2-user/db.txt
+echo "RDS endpoint v2: DB_OTHER_OPT2" >> /home/ec2-user/db.txt
 
 # Update wp-config.php with the RDS database credentials
 sudo cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
@@ -67,3 +89,5 @@ echo "WordPress wp-config.php updated with RDS values." >> db_OK.txt
 
 # Restart Apache to apply changes
 sudo systemctl restart httpd
+EOF
+}
