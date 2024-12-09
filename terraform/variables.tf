@@ -25,18 +25,18 @@ variable "db_instance_class" {
 variable "db_name" {
   description = "The database name for the RDS MariaDB instance"
   type        = string
-  sensitive   = true
+  default     = "wordpress"
 }
 
 variable "db_user" {
   description = "The username for the RDS MariaDB instance"
   type        = string
-  sensitive   = true
+  default = "wordpressuser"
 }
 variable "db_password" {
   description = "The master password for the RDS MariaDB instance"
   type        = string
-  sensitive   = true
+  default = "test2024test"
 }
 
 # Declare variables to stop "Warning: Value for undeclared variable" in the UI

@@ -32,38 +32,32 @@ sudo chown -R apache:apache /var/www/html/wordpress
 sudo chmod -R 755 /var/www/html/wordpress
 
 # DB credentials
-# Wait for RDS endpoint to be available
-# while ! nc -z $rds_endpoint 3306; do
-#   echo "Waiting for RDS to become available..."
-#   sleep 5
-# done
+RDS_MARIADB_ENDPOINT=${aws_db_instance.multi_az_mariadb.endpoint}
+DB_MARIADB_NAME=${var.db_name}
+DB_MARIADB_USER=${var.db_user}
+DB_MARIADB_PASSWORD=${var.db_password}
 
-# RDS_ENDPOINT=$(echo ${rds_endpoint} | sed 's/^[ \t]*//;s/[ \t]*$//;s/%$//')
-# DB_NAME=$(echo ${rds_db_name} | sed 's/^[ \t]*//;s/[ \t]*$//;s/%$//')
-# DB_USER=$(echo ${rds_username} | sed 's/^[ \t]*//;s/[ \t]*$//;s/%$//')
-# DB_PASSWORD=$(echo ${rds_password} | sed 's/^[ \t]*//;s/[ \t]*$//;s/%$//')
-
-RDS_ENDPOINT=${rds_endpoint}
-DB_NAME=${rds_db_name}
-DB_USER=${rds_username}
-DB_PASSWORD=${rds_password}
-
-# Log RDS and DB credentials to a file
+# Log RDS and DB credentials to a file (secure handling recommended)
 sudo touch /home/ec2-user/db.txt
-sudo chmod 777 /home/ec2-user/db.txt
-echo "DB name: $DB_NAME" >> /home/ec2-user/db.txt
-echo "DB user: $DB_USER" >> /home/ec2-user/db.txt
-echo "DB password: $DB_PASSWORD" >> /home/ec2-user/db.txt
-echo "RDS endpoint: $RDS_ENDPOINT" >> /home/ec2-user/db.txt
+sudo chmod 600 /home/ec2-user/db.txt
+echo "MARIADB name: $DB_MARIADB_NAME" >> /home/ec2-user/db.txt
+echo "MARIADB user: $DB_MARIADB_USER" >> /home/ec2-user/db.txt
+echo "MARIADB password: $DB_MARIADB_PASSWORD" >> /home/ec2-user/db.txt
+echo "MARIADB endpoint: $RDS_MARIADB_ENDPOINT" >> /home/ec2-user/db.txt
 
 # Update wp-config.php with the RDS database credentials
-sudo cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
-sudo sed -i "s/'database_name_here'/'$DB_NAME'/g" /var/www/html/wordpress/wp-config.php
-sudo sed -i "s/'username_here'/'$DB_USER'/g" /var/www/html/wordpress/wp-config.php
-sudo sed -i "s/'password_here'/'$DB_PASSWORD'/g" /var/www/html/wordpress/wp-config.php
-sudo sed -i "s/'localhost'/'$RDS_ENDPOINT'/g" /var/www/html/wordpress/wp-config.php
+if [ -f /var/www/html/wordpress/wp-config.php ]; then
+    sudo sed -i "s/'database_name_here'/'$DB_MARIADB_NAME'/g" /var/www/html/wordpress/wp-config.php
+    sudo sed -i "s/'username_here'/'$DB_MARIADB_USER'/g" /var/www/html/wordpress/wp-config.php
+    sudo sed -i "s/'password_here'/'$DB_MARIADB_PASSWORD'/g" /var/www/html/wordpress/wp-config.php
+    sudo sed -i "s/'localhost'/'$RDS_MARIADB_ENDPOINT'/g" /var/www/html/wordpress/wp-config.php
+    echo "WordPress wp-config.php updated with RDS values." >> db_OK.txt
+else
+    echo "wp-config.php not found!" >> db_error.txt
+fi
 
-echo "WordPress wp-config.php updated with RDS values." >> db_OK.txt
+# Clean up
+rm -f latest.tar.gz
 
 # Restart Apache to apply changes
 sudo systemctl restart httpd

@@ -1,0 +1,19 @@
+# data "aws_db_instance" "multi_az_mariadb" {
+#   db_instance_identifier =  aws_db_instance.multi_az_mariadb.identifier
+#   depends_on = [aws_db_instance.multi_az_mariadb ]
+# }
+
+# output "rds_endpoint" {
+#   value = data.aws_db_instance.multi_az_mariadb.endpoint
+#   }
+
+# output "rds_db_name" {
+#   value = data.aws_db_instance.multi_az_mariadb.db_name
+# }
+# output "rds_username" {
+#   value = var.db_user
+# }
+# output "rds_password" {
+#   value     = var.db_password
+
+# }
