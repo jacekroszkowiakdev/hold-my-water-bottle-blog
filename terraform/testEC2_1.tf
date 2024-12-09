@@ -78,7 +78,7 @@ resource "aws_instance" "test_ec2" {
     sudo sed -i "s/'password_here'/'$MARIADB_DB_PASSWORD'/g" /var/www/html/wordpress/wp-config.php
     sudo sed -i "s/'localhost'/'$MARIADB_RDS_ENDPOINT'/g" /var/www/html/wordpress/wp-config.php
 
-    echo "WordPress wp-config.php updated with RDS values." >> db_OK.txt
+    echo "WordPress wp-config.php updated with RDS values." >> home/ec2-user/db_OK.txt
 
     # Restart Apache to apply changes
     sudo systemctl restart httpd

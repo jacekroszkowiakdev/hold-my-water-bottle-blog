@@ -22,6 +22,11 @@ resource "aws_instance" "wordpress_instance" {
     Name = "WordPress Blog Instance"
   }
 
-  # Read the userData.sh file
-  user_data = file("${path.module}/userDataEC2.sh")
+  # Read the userdata.tpl file
+  user_data = templatefile("${path.module}/userdata.tpl", {
+    db_name     = var.db_name,
+    db_user     = var.db_user,
+    db_password = var.db_password,
+    db_endpoint = aws_db_instance.multi_az_mariadb.endpoint
+  })
 }

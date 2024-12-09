@@ -9,7 +9,7 @@ resource "aws_db_instance" "multi_az_mariadb" {
   max_allocated_storage   = 40
   username                = var.db_user
   password                = var.db_password
-  db_name                 =  var.db_name
+  db_name                 = var.db_name
   publicly_accessible     = false
   vpc_security_group_ids  = [aws_security_group.rds_mariadb_sg.id]
   db_subnet_group_name    = aws_db_subnet_group.rds_subnet_group.name

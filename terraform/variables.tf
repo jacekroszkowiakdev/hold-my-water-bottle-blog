@@ -54,3 +54,16 @@ variable "AWS_SESSION_TOKEN" {
   description = "AWS Session Token"
   type        = string
 }
+
+# TEST VARS
+variable "variable_1" {
+  description = "1"
+  type        = string
+  default = "one"
+}
+
+variable "variable_2" {
+  description = "2"
+  type        = string
+  default = "two"
+}
