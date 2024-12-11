@@ -16,6 +16,18 @@ variable "az2" {
   default     = "us-west-2b"
 }
 
+variable "ec2_instance_type" {
+  description = "The instance type for the ec2 instances"
+  type        = string
+  default     = "t2.micro"
+}
+
+variable "key_name" {
+  description = "Key name for the instance access"
+  type        = string
+  default = "vockey"
+}
+
 variable "db_instance_class" {
   description = "The instance class for the RDS instances"
   type        = string
@@ -53,17 +65,4 @@ variable "AWS_SECRET_ACCESS_KEY" {
 variable "AWS_SESSION_TOKEN" {
   description = "AWS Session Token"
   type        = string
-}
-
-# TEST VARS
-variable "variable_1" {
-  description = "1"
-  type        = string
-  default = "one"
-}
-
-variable "variable_2" {
-  description = "2"
-  type        = string
-  default = "two"
 }

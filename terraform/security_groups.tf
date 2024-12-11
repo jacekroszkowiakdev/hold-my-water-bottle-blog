@@ -67,3 +67,32 @@ resource "aws_security_group" "rds_mariadb_sg" {
     Name = "Capstone RDS SG"
   }
 }
+
+# ALB sg
+resource "aws_security_group" "capstone_alb_sg" {
+  name_prefix = "alb-sg-"
+  vpc_id      = aws_vpc.capstone_vpc.id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow HTTP traffic"
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow HTTPS traffic"
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
