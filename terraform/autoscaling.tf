@@ -77,3 +77,4 @@ resource "aws_autoscaling_policy" "scale_down" {
   cooldown               = 300
   autoscaling_group_name = aws_autoscaling_group.wordpress_instance_asg.name
 }
+
