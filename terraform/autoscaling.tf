@@ -1,34 +1,42 @@
-resource "aws_launch_configuration" "wordpress_autoscaling_lc" {
-    name          = "wordpress-lc"
-    image_id        = data.aws_ami.amazon_linux2.id
-    instance_type   = var.ec2_instance_type
-    security_groups = [aws_security_group.capstone_blog_sg.id]
-    key_name        = var.key_name
+resource "aws_launch_template" "wordpress_autoscaling_lt" {
+  name          = "wordpress-lt"
+  image_id      = data.aws_ami.amazon_linux2.id
+  instance_type = var.ec2_instance_type
+  vpc_security_group_ids = [aws_security_group.capstone_blog_sg.id]
+  key_name      = var.key_name
 
-    depends_on = [ aws_instance.wordpress_instance ]
-
-    user_data = templatefile("${path.module}/userdata.tpl", {
+  user_data = templatefile("${path.module}/userdata.tpl", {
     db_name     = var.db_name,
     db_user     = var.db_user,
     db_password = var.db_password,
     db_endpoint = aws_db_instance.multi_az_mariadb.endpoint
-    })
+  })
 
-    lifecycle {
-        create_before_destroy = true
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  # Optionally add tag here if required
+  tag_specifications {
+    resource_type = "instance"
+    tags = {
+      Name = "wordpress-instance"
     }
+  }
 }
 
-# You must specify either launch_configuration, launch_template, or mixed_instances_policy.
-
 resource "aws_autoscaling_group" "wordpress_instance_asg" {
-    launch_configuration = aws_launch_configuration.wordpress_autoscaling_lc.id
-    name                      = "wordpress-asg"
-    min_size                  = 1
-    max_size                  = 4
-    desired_capacity          = 2
+  launch_template {
+    id      = aws_launch_template.wordpress_autoscaling_lt.id
+    version = "$Latest"
+  }
 
-    vpc_zone_identifier = [
+  name                      = "wordpress-asg"
+  min_size                  = 1
+  max_size                  = 4
+  desired_capacity          = 2
+
+  vpc_zone_identifier = [
     aws_subnet.public_subnet_1.id,
     aws_subnet.public_subnet_2.id
   ]
@@ -67,7 +75,7 @@ resource "aws_autoscaling_policy" "scale_up" {
   scaling_adjustment     = 1
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
-  autoscaling_group_name = aws_autoscaling_group.wordpress_instance_asg.name
+  autoscaling_group_name   = aws_autoscaling_group.wordpress_instance_asg.name
 }
 
 resource "aws_autoscaling_policy" "scale_down" {
@@ -75,6 +83,5 @@ resource "aws_autoscaling_policy" "scale_down" {
   scaling_adjustment     = -1
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
-  autoscaling_group_name = aws_autoscaling_group.wordpress_instance_asg.name
+  autoscaling_group_name   = aws_autoscaling_group.wordpress_instance_asg.name
 }
-
