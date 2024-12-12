@@ -28,6 +28,11 @@ variable "key_name" {
   default = "vockey"
 }
 
+variable "email_address" {
+  description = "email for the sns"
+  type        = string
+}
+
 variable "db_instance_class" {
   description = "The instance class for the RDS instances"
   type        = string
