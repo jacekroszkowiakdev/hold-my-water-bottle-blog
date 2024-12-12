@@ -76,7 +76,6 @@ resource "aws_autoscaling_policy" "scale_up" {
   policy_type = "TargetTrackingScaling"
   scaling_adjustment     = 1
   adjustment_type        = "ChangeInCapacity"
-  cooldown               = 300
   autoscaling_group_name   = aws_autoscaling_group.wordpress_instance_asg.name
 
     target_tracking_configuration {
@@ -92,7 +91,6 @@ resource "aws_autoscaling_policy" "scale_down" {
   policy_type = "TargetTrackingScaling"
   scaling_adjustment     = -1
   adjustment_type        = "ChangeInCapacity"
-  cooldown               = 300
   autoscaling_group_name   = aws_autoscaling_group.wordpress_instance_asg.name
 
   target_tracking_configuration {
