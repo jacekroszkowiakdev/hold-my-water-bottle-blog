@@ -73,6 +73,7 @@ resource "aws_autoscaling_group" "wordpress_instance_asg" {
 
 resource "aws_autoscaling_policy" "scale_up" {
   name                   = "scale-up-policy"
+  policy_type = "TargetTrackingScaling"
   scaling_adjustment     = 1
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
@@ -88,6 +89,7 @@ resource "aws_autoscaling_policy" "scale_up" {
 
 resource "aws_autoscaling_policy" "scale_down" {
   name                   = "scale-down-policy"
+  policy_type = "TargetTrackingScaling"
   scaling_adjustment     = -1
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300

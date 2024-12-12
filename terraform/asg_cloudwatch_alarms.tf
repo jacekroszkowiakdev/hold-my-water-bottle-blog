@@ -46,6 +46,6 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
   dimensions = {
     InstanceId = aws_autoscaling_group.wordpress_instance_asg.id
   }
-  alarm_actions      = [aws_autoscaling_policy.scale_down.arn]
+  alarm_actions      = [aws_autoscaling_policy.scale_dow.arn]
   #alarm_actions       = [aws_sns_topic.sns_topic.arn]
 }
