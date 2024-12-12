@@ -45,5 +45,15 @@ else
   echo "wp-config.php not found!" >> /home/ec2-user/db_error.txt
 fi
 
+# Create stress_test script
+sudo touch /home/ec2-user/stress_test.sh
+sudo chmod 700 stress_test.sh
+echo '#!/bin/bash' >> /home/ec2-user/stress_test.sh
+echo "Installing stress test..." >> /home/ec2-user/stress_test.sh
+echo sudo yum install -y stress >> /home/ec2-user/stress_test.sh
+echo "Starting stress test..." >> /home/ec2-user/stress_test.sh
+echo stress --cpu 8 --timeout 300 >> /home/ec2-user/stress_test.sh
+echo "Stress test completed." >> /home/ec2-user/stress_test.sh
+
 # Restart Apache
 sudo systemctl restart httpd

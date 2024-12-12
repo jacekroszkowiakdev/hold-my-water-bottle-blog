@@ -1,4 +1,3 @@
-
 # ALB Resource
 resource "aws_lb" "wordpress_alb" {
   name               = "wordpress-alb"
@@ -38,6 +37,13 @@ resource "aws_lb_target_group_attachment" "wordpress_tg_attachment" {
   target_group_arn = aws_lb_target_group.wordpress_tg.arn
   target_id        = aws_instance.wordpress_instance.id
   port             = 80
+}
+
+# Attach the ALB to the target group
+
+resource "aws_autoscaling_attachment" "wordpress_alb_attachment" {
+   autoscaling_group_name = aws_autoscaling_group.wordpress_instance_asg.id
+   lb_target_group_arn = aws_lb_target_group.wordpress_tg.arn
 }
 
 # HTTP Listener

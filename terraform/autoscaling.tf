@@ -18,7 +18,6 @@ user_data = base64encode(
     create_before_destroy = true
   }
 
-  # Optionally add tag here if required
   tag_specifications {
     resource_type = "instance"
     tags = {
@@ -50,24 +49,24 @@ resource "aws_autoscaling_group" "wordpress_instance_asg" {
   health_check_type         = "ELB"
   health_check_grace_period = 300
 
+  termination_policies = ["OldestInstance"]
+
   lifecycle {
     create_before_destroy = true
   }
 
   instance_maintenance_policy {
     min_healthy_percentage = 90
-    max_healthy_percentage = 120
+    max_healthy_percentage = 100
   }
 
   timeouts {
     delete = "15m"
   }
 
-  termination_policies = ["OldestInstance"]
-
   tag {
     key                 = "Name"
-    value               = "wordpress-asg-instance"
+    value               = "WordPress Blog Instance AS"
     propagate_at_launch = true
   }
 }
@@ -78,6 +77,13 @@ resource "aws_autoscaling_policy" "scale_up" {
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
   autoscaling_group_name   = aws_autoscaling_group.wordpress_instance_asg.name
+
+    target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 85.0
+  }
 }
 
 resource "aws_autoscaling_policy" "scale_down" {
@@ -86,4 +92,11 @@ resource "aws_autoscaling_policy" "scale_down" {
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
   autoscaling_group_name   = aws_autoscaling_group.wordpress_instance_asg.name
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 50.0
+  }
 }
