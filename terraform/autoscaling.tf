@@ -5,12 +5,14 @@ resource "aws_launch_template" "wordpress_autoscaling_lt" {
   vpc_security_group_ids = [aws_security_group.capstone_blog_sg.id]
   key_name      = var.key_name
 
-  user_data = templatefile("${path.module}/userdata.tpl", {
-    db_name     = var.db_name,
-    db_user     = var.db_user,
-    db_password = var.db_password,
-    db_endpoint = aws_db_instance.multi_az_mariadb.endpoint
-  })
+user_data = base64encode(
+    templatefile("${path.module}/userdata.tpl", {
+      db_name     = var.db_name,
+      db_user     = var.db_user,
+      db_password = var.db_password,
+      db_endpoint = aws_db_instance.multi_az_mariadb.endpoint
+    })
+  )
 
   lifecycle {
     create_before_destroy = true
