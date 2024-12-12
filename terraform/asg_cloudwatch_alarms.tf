@@ -29,7 +29,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
     InstanceId = aws_autoscaling_group.wordpress_instance_asg.id
   }
 
-  alarm_actions = aws_autoscaling_policy.scale_up.name
+  alarm_actions = [aws_autoscaling_policy.scale_up.arn]
   #alarm_actions       = [aws_sns_topic.sns_topic.arn]
 }
 
@@ -46,6 +46,6 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
   dimensions = {
     InstanceId = aws_autoscaling_group.wordpress_instance_asg.id
   }
-  alarm_actions      = aws_autoscaling_policy.scale_down.name
+  alarm_actions      = [aws_autoscaling_policy.scale_down.arn]
   #alarm_actions       = [aws_sns_topic.sns_topic.arn]
 }
