@@ -18,7 +18,7 @@ resource "aws_route_table" "private_route_table_1" {
   vpc_id = aws_vpc.capstone_vpc.id
 
   tags = {
-    Name = "Private Route Table AZ1"
+    Name = "Private Route Table ${var.az_primary}"
   }
 }
 
@@ -26,7 +26,7 @@ resource "aws_route_table" "private_route_table_2" {
   vpc_id = aws_vpc.capstone_vpc.id
 
   tags = {
-    Name = "Private Route Table AZ2"
+    Name = "Private Route Table ${var.az_secondary}"
   }
 }
 

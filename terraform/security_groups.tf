@@ -1,4 +1,4 @@
-resource "aws_security_group" "capstone_blog_sg" {
+resource "aws_security_group" "capstone_wordpress_sg" {
   name        = "web-security-group"
   description = "Allow SSH, HTTP, and HTTPS access"
   vpc_id      = aws_vpc.capstone_vpc.id
@@ -38,7 +38,7 @@ resource "aws_security_group" "capstone_blog_sg" {
   }
 
   tags = {
-    Name = "Capstone Blog SG"
+    Name = "Capstone Wordpress SG"
   }
 }
 
@@ -53,7 +53,7 @@ resource "aws_security_group" "rds_mariadb_sg" {
     from_port   = 3306
     to_port     = 3306
     protocol    = "tcp"
-    security_groups = [aws_security_group.capstone_blog_sg.id]
+    security_groups = [aws_security_group.capstone_wordpress_sg.id]
   }
 
   egress {

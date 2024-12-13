@@ -2,7 +2,7 @@ resource "aws_launch_template" "wordpress_autoscaling_lt" {
   name          = "wordpress-lt"
   image_id      = data.aws_ami.amazon_linux2.id
   instance_type = var.ec2_instance_type
-  vpc_security_group_ids = [aws_security_group.capstone_blog_sg.id]
+  vpc_security_group_ids = [aws_security_group.capstone_wordpress_sg.id]
   key_name      = var.key_name
 
 user_data = base64encode(
@@ -26,16 +26,11 @@ user_data = base64encode(
   }
 }
 
-resource "aws_autoscaling_group" "wordpress_instance_asg" {
+resource "aws_autoscaling_group" "wordpress_asg" {
   launch_template {
     id      = aws_launch_template.wordpress_autoscaling_lt.id
     version = "$Latest"
   }
-
-  name                      = "wordpress-asg"
-  min_size                  = 1
-  max_size                  = 4
-  desired_capacity          = 2
 
   vpc_zone_identifier = [
     aws_subnet.public_subnet_1.id,
@@ -45,6 +40,11 @@ resource "aws_autoscaling_group" "wordpress_instance_asg" {
   target_group_arns = [
     aws_lb_target_group.wordpress_tg.arn
   ]
+
+  name                      = "wordpress-asg"
+  min_size                  = 1
+  max_size                  = 4
+  desired_capacity          = 2
 
   health_check_type         = "ELB"
   health_check_grace_period = 300
@@ -66,7 +66,7 @@ resource "aws_autoscaling_group" "wordpress_instance_asg" {
 
   tag {
     key                 = "Name"
-    value               = "WordPress Blog Instance AS"
+    value               = "WordPress Instance AS"
     propagate_at_launch = true
   }
 }
@@ -75,7 +75,7 @@ resource "aws_autoscaling_policy" "scale_up" {
   name                   = "scale-up-policy"
   policy_type = "TargetTrackingScaling"
   adjustment_type        = "ChangeInCapacity"
-  autoscaling_group_name   = aws_autoscaling_group.wordpress_instance_asg.name
+  autoscaling_group_name   = aws_autoscaling_group.wordpress_asg.name
 
     target_tracking_configuration {
     predefined_metric_specification {
@@ -89,7 +89,7 @@ resource "aws_autoscaling_policy" "scale_down" {
   name                   = "scale-down-policy"
   policy_type = "TargetTrackingScaling"
   adjustment_type        = "ChangeInCapacity"
-  autoscaling_group_name   = aws_autoscaling_group.wordpress_instance_asg.name
+  autoscaling_group_name   = aws_autoscaling_group.wordpress_asg.name
 
   target_tracking_configuration {
     predefined_metric_specification {
@@ -97,4 +97,9 @@ resource "aws_autoscaling_policy" "scale_down" {
     }
     target_value = 50.0
   }
+}
+
+resource "aws_autoscaling_attachment" "wordpress_asg_attachment" {
+  autoscaling_group_name = aws_autoscaling_group.wordpress_asg.name
+  lb_target_group_arn = aws_lb_target_group.wordpress_tg.arn
 }

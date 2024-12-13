@@ -14,12 +14,12 @@ resource "aws_instance" "wordpress_instance" {
   key_name               = var.key_name
   subnet_id             = aws_subnet.public_subnet_1.id
   associate_public_ip_address = true
-  vpc_security_group_ids = [aws_security_group.capstone_blog_sg.id]
+  vpc_security_group_ids = [aws_security_group.capstone_wordpress_sg.id]
 
   depends_on = [aws_db_instance.multi_az_mariadb]
 
   tags = {
-    Name = "WordPress Blog Instance"
+    Name = "Wordpress Instance"
   }
 
   # Read the userdata.tpl file
