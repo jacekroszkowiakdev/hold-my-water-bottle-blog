@@ -1,7 +1,7 @@
 # Subnets in availability zone 1
 resource "aws_subnet" "public_subnet_1" {
   vpc_id                  = aws_vpc.capstone_vpc.id
-  cidr_block              = var.public_subnets[1]
+  cidr_block              = var.public_subnets[0]
   map_public_ip_on_launch = true
   availability_zone       = var.az_primary
 
@@ -12,7 +12,7 @@ resource "aws_subnet" "public_subnet_1" {
 
 resource "aws_subnet" "private_subnet_1" {
   vpc_id            = aws_vpc.capstone_vpc.id
-  cidr_block              = var.private_subnets[1]
+  cidr_block              = var.private_subnets[0]
   availability_zone = var.az_primary
 
   tags = {
@@ -23,7 +23,7 @@ resource "aws_subnet" "private_subnet_1" {
 # Subnets in availability zone 2
 resource "aws_subnet" "public_subnet_2" {
   vpc_id                  = aws_vpc.capstone_vpc.id
-  cidr_block              = var.public_subnets[2]
+  cidr_block              = var.public_subnets[1]
   map_public_ip_on_launch = true
   availability_zone       = var.az_secondary
 
@@ -34,7 +34,7 @@ resource "aws_subnet" "public_subnet_2" {
 
 resource "aws_subnet" "private_subnet_2" {
   vpc_id            = aws_vpc.capstone_vpc.id
-  cidr_block              = var.private_subnets[2]
+  cidr_block              = var.private_subnets[1]
   availability_zone = var.az_secondary
 
   tags = {
