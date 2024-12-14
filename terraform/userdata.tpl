@@ -40,7 +40,10 @@ if [ -f /var/www/html/wordpress/wp-config-sample.php ]; then
   sudo sed -i "s/'username_here'/'${db_user}'/g" /var/www/html/wordpress/wp-config.php
   sudo sed -i "s/'password_here'/'${db_password}'/g" /var/www/html/wordpress/wp-config.php
   sudo sed -i "s/'localhost'/'${db_endpoint}'/g" /var/www/html/wordpress/wp-config.php
-  echo "WordPress wp-config.php updated successfully!" >> /home/ec2-user/db_OK.txt
+  sudo wp option update home "${domain_name}"
+  sudo wp option update siteurl "${domain_name}"
+  echo "${domain_name}" >> /home/ec2-user/wordpress_OK.txt
+  echo "WordPress wp-config.php updated successfully!" >> /home/ec2-user/wordpress_OK.txt
 else
   echo "wp-config.php not found!" >> /home/ec2-user/db_error.txt
 fi

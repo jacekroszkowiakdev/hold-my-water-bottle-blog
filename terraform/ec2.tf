@@ -27,6 +27,7 @@ resource "aws_instance" "wordpress_instance" {
     db_name     = var.db_name,
     db_user     = var.db_user,
     db_password = var.db_password,
-    db_endpoint = aws_db_instance.multi_az_mariadb.endpoint
+    db_endpoint = aws_db_instance.multi_az_mariadb.endpoint,
+    domain_name = var.domain_name
   })
 }

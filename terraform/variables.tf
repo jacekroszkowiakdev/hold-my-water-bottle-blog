@@ -50,6 +50,10 @@ variable "email_addresses" {
   type    = list(string)
 }
 
+variable "domain_name" {
+  type    = string
+}
+
 variable "db_instance_class" {
   description = "The instance class for the RDS instances"
   type        = string
