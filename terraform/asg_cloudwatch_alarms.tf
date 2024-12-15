@@ -13,6 +13,10 @@ resource "aws_cloudwatch_metric_alarm" "cpu_utilization" {
   }
 
   alarm_actions       = [aws_sns_topic.topic.arn]
+
+  tags = {
+    Name = "Monitor CPU Utilization"
+  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
@@ -34,6 +38,10 @@ resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
     aws_autoscaling_policy.scale_up.arn,
     aws_sns_topic.topic.arn
   ]
+
+   tags = {
+    Name = "Scale Up"
+  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
@@ -42,6 +50,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
   comparison_operator      = "LessThanThreshold"
   statistic                = "Average"
   evaluation_periods       = 2
+  period                   = 120
   threshold                = 50.0
   namespace                = "AWS/EC2"
   metric_name              = "CPUUtilization"
@@ -54,4 +63,8 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
     aws_autoscaling_policy.scale_up.arn,
     aws_sns_topic.topic.arn
   ]
+
+  tags = {
+    Name = "Scale Down"
+  }
 }

@@ -40,12 +40,19 @@ if [ -f /var/www/html/wordpress/wp-config-sample.php ]; then
   sudo sed -i "s/'username_here'/'${db_user}'/g" /var/www/html/wordpress/wp-config.php
   sudo sed -i "s/'password_here'/'${db_password}'/g" /var/www/html/wordpress/wp-config.php
   sudo sed -i "s/'localhost'/'${db_endpoint}'/g" /var/www/html/wordpress/wp-config.php
+
+  # Install wp-cli
+  curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+  chmod +x wp-cli.phar
+  sudo mv wp-cli.phar /usr/local/bin/wp
+  echo "wp-cli installed successfully!" > /home/ec2-user/wp_summary.txt
+  # Set the domain
   sudo wp option update home "${domain_name}"
   sudo wp option update siteurl "${domain_name}"
   echo "${domain_name}" >> /home/ec2-user/wordpress_OK.txt
-  echo "WordPress wp-config.php updated successfully!" >> /home/ec2-user/wordpress_OK.txt
+  echo "WordPress configured successfully!" >> /home/ec2-user/wp_summary.txt
 else
-  echo "wp-config.php not found!" >> /home/ec2-user/db_error.txt
+  echo "wp-config.php not found!" >> /home/ec2-user/wp_error.txt
 fi
 
 # Create stress_test script

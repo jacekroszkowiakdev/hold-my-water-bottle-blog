@@ -14,12 +14,12 @@ resource "aws_route53_record" "wordpress_dns" {
   }
 }
 
-resource "aws_route53_record" "wordpress_cert_validation_record" {
-  for_each = { for d in aws_acm_certificate.wordpress_ssl_cert.domain_validation_options : d.domain_name => d }
+# resource "aws_route53_record" "wordpress_cert_validation_record" {
+#   for_each = { for d in aws_acm_certificate.wordpress_ssl_cert.domain_validation_options : d.domain_name => d }
 
-  zone_id = aws_route53_zone.primary.zone_id
-  name    = each.value.resource_record_name
-  type    = each.value.resource_record_type
-  records = [each.value.resource_record_value]
-  ttl     = 300
-}
+#   zone_id = aws_route53_zone.primary.zone_id
+#   name    = each.value.resource_record_name
+#   type    = each.value.resource_record_type
+#   records = [each.value.resource_record_value]
+#   ttl     = 300
+# }

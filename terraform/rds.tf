@@ -15,7 +15,7 @@ resource "aws_db_instance" "multi_az_mariadb" {
   db_subnet_group_name    = aws_db_subnet_group.rds_subnet_group.name
 
  # Multi-AZ for failover
-  multi_az                = true
+  multi_az                = false
 
   # Storage settings
   storage_type            = "gp2"
@@ -24,7 +24,7 @@ resource "aws_db_instance" "multi_az_mariadb" {
   final_snapshot_identifier = "capstone-mariadb-instance-final-snapshot"
 
   tags = {
-    Name        = "MyMariaDBInstance"
+    Name        = "CapstoneMariaDBInstance"
     Environment = "Production"
   }
 }
