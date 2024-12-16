@@ -13,10 +13,6 @@ resource "aws_cloudwatch_metric_alarm" "cpu_utilization" {
   }
 
   alarm_actions       = [aws_sns_topic.topic.arn]
-
-  tags = {
-    Name = "Monitor CPU Utilization"
-  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
@@ -38,10 +34,6 @@ resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
     aws_autoscaling_policy.scale_up.arn,
     aws_sns_topic.topic.arn
   ]
-
-   tags = {
-    Name = "Scale Up"
-  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
@@ -63,8 +55,4 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
     aws_autoscaling_policy.scale_up.arn,
     aws_sns_topic.topic.arn
   ]
-
-  tags = {
-    Name = "Scale Down"
-  }
 }

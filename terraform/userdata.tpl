@@ -49,7 +49,7 @@ if [ -f /var/www/html/wordpress/wp-config-sample.php ]; then
   # Set the domain
   sudo wp option update home "${domain_name}"
   sudo wp option update siteurl "${domain_name}"
-  echo "${domain_name}" >> /home/ec2-user/wordpress_OK.txt
+  echo "${domain_name}" >> /home/ec2-user/wp_summary.txt
   echo "WordPress configured successfully!" >> /home/ec2-user/wp_summary.txt
 else
   echo "wp-config.php not found!" >> /home/ec2-user/wp_error.txt
