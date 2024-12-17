@@ -43,6 +43,8 @@ For persistent data storage, an Amazon Relational Database Service (RDS) instanc
 
 **Infrastructure Components**
 
+![Architecture Diagram](./documents/capstone_cloud_diagram.png)
+
 -   Virtual Private Cloud (VPC):
 
     -   Two Public Subnets
