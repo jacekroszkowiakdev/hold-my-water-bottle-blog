@@ -13,22 +13,19 @@ sudo yum install -y httpd
 sudo systemctl start httpd
 sudo systemctl enable httpd
 
-echo "Define APACHE_LOG_DIR $APACHE_LOG_DIR" | sudo tee -a /etc/httpd/conf/httpd.conf
 # Configure VirtualHost for the domain
 echo "Configuring VirtualHost for $domain_name"
 VHOST_CONF="
 <VirtualHost *:80>
     DocumentRoot /var/www/html/wordpress
     ServerName $domain_name
-    ErrorLog \${APACHE_LOG_DIR}/error_log
-    CustomLog \${APACHE_LOG_DIR}/access_log combined
 </VirtualHost>
 "
 
 # Append VirtualHost configuration to httpd.conf
 echo "$VHOST_CONF" | sudo tee -a /etc/httpd/conf/httpd.conf
 
-
+sudo systemctl restart httpd
 
 # Install PHP and related packages
 sudo yum install -y wget unzip php-cli php-fpm php-mysqlnd php-json php-opcache php-xml php-gd php-mbstring
