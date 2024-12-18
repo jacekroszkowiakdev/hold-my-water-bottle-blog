@@ -12,6 +12,10 @@ user_data = base64encode(
       db_password = var.db_password,
       db_endpoint = aws_db_instance.multi_az_mariadb.endpoint,
       domain_name = var.domain_name
+      region                = var.region
+      AWS_ACCESS_KEY_ID     = var.AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY = var.AWS_SECRET_ACCESS_KEY
+      AWS_SESSION_TOKEN     = var.AWS_SESSION_TOKEN
     })
   )
 

@@ -4,7 +4,10 @@
 sudo yum update -y
 
 # Configure AWS CLI
-aws configure set region "us-west-2"
+aws configure set region "${region}"
+aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
+aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
+aws configure set region "${AWS_DEFAULT_REGION}"
 
 # Install and configure Apache
 sudo yum install -y httpd
@@ -40,20 +43,24 @@ if [ -f /var/www/html/wordpress/wp-config-sample.php ]; then
   sudo sed -i "s/'username_here'/'${db_user}'/g" /var/www/html/wordpress/wp-config.php
   sudo sed -i "s/'password_here'/'${db_password}'/g" /var/www/html/wordpress/wp-config.php
   sudo sed -i "s/'localhost'/'${db_endpoint}'/g" /var/www/html/wordpress/wp-config.php
-
-  # Install wp-cli
-  curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-  chmod +x wp-cli.phar
-  sudo mv wp-cli.phar /usr/local/bin/wp
-  echo "wp-cli installed successfully!" > /home/ec2-user/wp_summary.txt
-  # Set the domain
-  sudo wp option update home "${domain_name}"
-  sudo wp option update siteurl "${domain_name}"
-  echo "${domain_name}" >> /home/ec2-user/wp_summary.txt
+  sed -i "s|^define('WP_SITEURL'.*|define('WP_SITEURL', 'http://$domain_name/wordpress');|" /var/www/html/wp-config.php
+  sed -i "s|^define('WP_HOME'.*|define('WP_HOME', 'http://$domain_name');|" /var/www/html/wp-config.php
+  cat  /var/www/html/wp-config.php >> /home/ec2-user/wp_summary.txt
   echo "WordPress configured successfully!" >> /home/ec2-user/wp_summary.txt
-else
-  echo "wp-config.php not found!" >> /home/ec2-user/wp_error.txt
-fi
+
+#   # Install wp-cli
+#   curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+#   chmod +x wp-cli.phar
+#   sudo mv wp-cli.phar /usr/local/bin/wp
+#   echo "wp-cli installed successfully!" > /home/ec2-user/wp_summary.txt
+#   # Set the domain
+#   sudo wp option update home "${domain_name}"
+#   sudo wp option update siteurl "${domain_name}"
+#   echo "${domain_name}" >> /home/ec2-user/wp_summary.txt
+#   echo "WordPress configured successfully!" >> /home/ec2-user/wp_summary.txt
+# else
+#   echo "wp-config.php not found!" >> /home/ec2-user/wp_error.txt
+# fi
 
 # Create stress_test script
 sudo touch /home/ec2-user/stress_test.sh

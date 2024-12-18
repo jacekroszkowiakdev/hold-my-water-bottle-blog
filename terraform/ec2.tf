@@ -22,12 +22,15 @@ resource "aws_instance" "wordpress_instance" {
     Name = "Wordpress Instance"
   }
 
-  # Read the userdata.tpl file
   user_data = templatefile("${path.module}/userdata.tpl", {
-    db_name     = var.db_name,
-    db_user     = var.db_user,
-    db_password = var.db_password,
-    db_endpoint = aws_db_instance.multi_az_mariadb.endpoint,
-    domain_name = var.domain_name
+      db_name     = var.db_name,
+      db_user     = var.db_user,
+      db_password = var.db_password,
+      db_endpoint = aws_db_instance.multi_az_mariadb.endpoint,
+      domain_name = var.domain_name
+      region                = var.region
+      AWS_ACCESS_KEY_ID     = var.AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY = var.AWS_SECRET_ACCESS_KEY
+      AWS_SESSION_TOKEN     = var.AWS_SESSION_TOKEN
   })
 }

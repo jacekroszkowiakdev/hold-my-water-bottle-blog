@@ -73,7 +73,19 @@ For persistent data storage, an Amazon Relational Database Service (RDS) instanc
         -   Target Group
         -   Listener Configuration
 
-**Technologies:**
+-   Monitoring and Notification:
+
+    -   CloudWatch:
+
+        -   CloudWatch Metrics: Monitors the performance and health of EC2 instances, Auto Scaling Group
+        -   CloudWatch Alarms: alarms set up to track important metrics such as CPU utilization triggering scaling when thresholds are reached
+
+    -   Simple Notification Service (SNS):
+
+        -   Notify administrators when EC2 instances scale up or down
+        -   Alert on critical EC2 CPU utilization
+
+    **Technologies:**
 
 -   Infrastructure as Code (IaC): Terraform
 -   Cloud Platform: AWS
