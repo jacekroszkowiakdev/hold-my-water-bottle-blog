@@ -13,6 +13,23 @@ sudo yum install -y httpd
 sudo systemctl start httpd
 sudo systemctl enable httpd
 
+echo "Define APACHE_LOG_DIR $APACHE_LOG_DIR" | sudo tee -a /etc/httpd/conf/httpd.conf
+# Configure VirtualHost for the domain
+echo "Configuring VirtualHost for $domain_name"
+VHOST_CONF="
+<VirtualHost *:80>
+    DocumentRoot /var/www/html/wordpress
+    ServerName $domain_name
+    ErrorLog \${APACHE_LOG_DIR}/error_log
+    CustomLog \${APACHE_LOG_DIR}/access_log combined
+</VirtualHost>
+"
+
+# Append VirtualHost configuration to httpd.conf
+echo "$VHOST_CONF" | sudo tee -a /etc/httpd/conf/httpd.conf
+
+
+
 # Install PHP and related packages
 sudo yum install -y wget unzip php-cli php-fpm php-mysqlnd php-json php-opcache php-xml php-gd php-mbstring
 
@@ -46,20 +63,9 @@ if [ -f /var/www/html/wordpress/wp-config-sample.php ]; then
   sed -i "s|^define('WP_HOME'.*|define('WP_HOME', 'http://$domain_name');|" /var/www/html/wp-config.php
   cat  /var/www/html/wp-config.php >> /home/ec2-user/wp_summary.txt
   echo "WordPress configured successfully!" >> /home/ec2-user/wp_summary.txt
-
-#   # Install wp-cli
-#   curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-#   chmod +x wp-cli.phar
-#   sudo mv wp-cli.phar /usr/local/bin/wp
-#   echo "wp-cli installed successfully!" > /home/ec2-user/wp_summary.txt
-#   # Set the domain
-#   sudo wp option update home "${domain_name}"
-#   sudo wp option update siteurl "${domain_name}"
-#   echo "${domain_name}" >> /home/ec2-user/wp_summary.txt
-#   echo "WordPress configured successfully!" >> /home/ec2-user/wp_summary.txt
-# else
-#   echo "wp-config.php not found!" >> /home/ec2-user/wp_error.txt
-# fi
+  else
+  echo "wp-config.php not found!" >> /home/ec2-user/wp_error.txt
+fi
 
 # Create stress_test script
 sudo touch /home/ec2-user/stress_test.sh
