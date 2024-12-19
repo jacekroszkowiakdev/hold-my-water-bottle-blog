@@ -45,8 +45,8 @@ if [ -f /var/www/html/wordpress/wp-config-sample.php ]; then
   sudo sed -i "s/'username_here'/'${db_user}'/g" /var/www/html/wordpress/wp-config.php
   sudo sed -i "s/'password_here'/'${db_password}'/g" /var/www/html/wordpress/wp-config.php
   sudo sed -i "s/'localhost'/'${db_endpoint}'/g" /var/www/html/wordpress/wp-config.php
-  sed -i "s|^define('WP_SITEURL'.*|define('WP_SITEURL', 'http://$domain_name/wordpress');|" /var/www/html/wordpress/wp-config.php
-  sed -i "s|^define('WP_HOME'.*|define('WP_HOME', 'http://$domain_name');|" /var/www/html/wordpress/wp-config.php
+  sudo sed -i "s|^define('WP_SITEURL'.*|define('WP_SITEURL', 'http://$domain_name/wordpress');|" /var/www/html/wordpress/wp-config.php
+  sudo sed -i "s|^define('WP_HOME'.*|define('WP_HOME', 'http://$domain_name');|" /var/www/html/wordpress/wp-config.php
   cat  /var/www/html/wordpress/wp-config.php >> /home/ec2-user/wp_summary.txt
   echo "WordPress configured successfully!" >> /home/ec2-user/wp_summary.txt
   else
